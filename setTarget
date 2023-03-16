@@ -1,0 +1,47 @@
+#!/bin/bash
+
+# Colors
+RED="\e[31m"
+GREEN="\e[32m"
+L_CYAN="\e[1;36m"
+YELLOW="\e[1;33m"
+ENDCOLOR="\e[0m"
+
+
+# Set 'target' variable as 'none' in .zsh the following line
+# tmux set-environment -g target none
+ip=$1
+
+ip=$(echo $ip | tr '[:upper:]' '[:lower:]')
+
+if [ $# -eq 0 ]; then
+  echo -e "No arguments provided"
+  echo -e "Usage:  $0 TARGET_IP"
+  echo -e "Example:  $0 10.10.10.26"
+  exit 1
+fi
+
+# Check if format given if valid for a IPv4 format
+if ! [[ $ip =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]] && [[ $ip != 'none' ]]; then
+  echo -e "'$1' is not a valid IP. Argument provided must be in an IP format"
+  echo -e "Format must be: NUMBER.NUMBER.NUMBER.NUMBER"
+  echo -e "Example: 10.10.10.26"
+  exit 1
+fi
+
+if [[ $ip != 'none' ]]; then
+  # Check if given numbers are not bigger than 256 (maximum value for IPs)
+  for i in 1 2 3 4; do
+    # Get the number separated by points in IPv4 format
+    number=$(echo "$ip" | cut -d . -f ${i})
+    if [ $number -gt 255 ]; then
+      echo -e "Provided format for '$1' argument is valid. However, numbers between points cannot be greater than 256"
+      echo -e "'$number' is an invalid number in an IPv4 address"
+      echo -e "Check this and retry"
+      exit 1
+    fi
+  done
+fi
+tmux set-environment target $ip
+
+echo -e "${L_CYAN}[${YELLOW}+${L_CYAN}]${RED} Exporting 'target' variable in Tmux as ${GREEN}$ip${ENDCOLOR}"
