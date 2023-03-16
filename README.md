@@ -1,0 +1,3 @@
+Some of my configs for ZSH, Tmux and others...
+
+They do not contain any sensitive information. Do not lose your time :D
