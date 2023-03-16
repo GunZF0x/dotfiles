@@ -9,7 +9,7 @@ ENDCOLOR="\e[0m"
 
 
 # Set 'target' variable as 'none' in .zsh the following line
-# tmux set-environment -g target none
+# Example usage: setTarget 10.10.10.10
 ip=$1
 
 ip=$(echo $ip | tr '[:upper:]' '[:lower:]')
